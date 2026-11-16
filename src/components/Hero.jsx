@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap, reduceMotion } from '../lib/motion.js';
 import RevealText from './RevealText.jsx';
+import { scrollToEl } from '../lib/motion.js';
 
 const fmtTime = () =>
   new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Africa/Nairobi' }).format(new Date());
@@ -48,7 +49,7 @@ export default function Hero() {
   useEffect(() => {
     if (reduceMotion()) return;
     const ctx = gsap.context(() => {
-      gsap.from('[data-hero]', { opacity: 0, y: 16, duration: 1, ease: 'power3.out', stagger: 0.15, delay: 0.5 });
+      gsap.from('[data-hero]', { opacity: 0, y: 12, filter: 'blur(6px)', duration: 0.7, ease: 'expo.out', stagger: 0.07, delay: 0.35, clearProps: 'filter' });
     }, root);
     return () => ctx.revert();
   }, []);
@@ -69,7 +70,7 @@ export default function Hero() {
           el: bg.current,
           mouseControls: true, touchControls: false, gyroControls: false,
           minHeight: 200, minWidth: 200, scale: 1,
-          color: 0xf5f5f7, color2: 0x6e6e73, backgroundColor: 0x000000,
+          color: 0xff8a3d, color2: 0x5a3a22, backgroundColor: 0x0c0907,
           size: 2.6, spacing: 36, showLines: false,
         });
       } catch (err) {
@@ -90,12 +91,24 @@ export default function Hero() {
   return (
     <header id="hero" ref={root}>
       <div id="vanta" ref={bg} />
+      <div className="glow" aria-hidden="true" />
       <div className="hero-in">
-        <div className="eyebrow" data-hero>Rick Muthoka</div>
-        <RevealText text="Software, from the database to the pixel." />
+        <a className="status" data-hero href="https://github.com/muthokaricky-alt/Touchline" target="_blank" rel="noopener noreferrer">
+          <span className="live" /><span>Now building <b>Touchline</b>, a football manager game</span>
+        </a>
+        <RevealText text="I build the software I actually want to use." />
         <p data-hero>
-          Computer Science at Strathmore University. Full-stack web apps, a browser extension, and a QR encoder written from scratch.
+          I'm <strong>Rick Muthoka</strong>, a full-stack developer studying Computer Science at Strathmore
+          University. I ship real apps with live demos: an anime tracker, an event booking system, a learning
+          platform, and an ad blocker built from scratch.
         </p>
+        <ul className="chips" data-hero>
+          <li>React &amp; TypeScript</li><li>Node &amp; Postgres</li><li>React Native</li><li>Open to internships</li>
+        </ul>
+        <div className="cta" data-hero>
+          <a className="btn primary" href="#work" onClick={(e) => { e.preventDefault(); scrollToEl('#work'); }}>See my work</a>
+          <a className="btn" href="mailto:muthokaricky@gmail.com">Email me</a>
+        </div>
       </div>
       <div className="hero-foot" data-hero>
         <span>Mombasa, Kenya · <Clock /></span>

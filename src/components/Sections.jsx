@@ -2,36 +2,23 @@ import { useEffect, useRef, useState } from 'react';
 import { also, stack, contact, interests } from '../data.js';
 import { gsap, reduceMotion, finePointer } from '../lib/motion.js';
 import { useResume } from '../lib/resume.js';
-import Scramble from './rb/Scramble.jsx';
-import Magnetic from './rb/Magnetic.jsx';
-
-export function Sec({ n, label }) {
-  return (
-    <div className="sec" data-r>
-      <b>{n}</b><i /><span>{label}</span>
-    </div>
-  );
-}
 
 export function Also() {
   return (
     <section className="also" id="more">
       <div>
-        <Sec n="03" label="More" />
-        <h2 data-r>In progress, and in a team.</h2>
+        <h2>Building now, and <em>with a team</em>.</h2>
         <div className="list">
           {also.map((a) => (
-            <div className="item" data-r key={a.name}>
-              <h4>{a.label}</h4>
+            <div className="item" key={a.name}>
               <div>
-                <h5>{a.name}</h5>
+                <h3>{a.name}</h3>
+                <p className="status">{a.label}</p>
                 <p>{a.blurb}</p>
-                {a.stack && <div className="meta">{a.stack.join(' / ')}</div>}
+                {a.stack && <div className="meta">{a.stack.join(' · ')}</div>}
                 <div className="links">
                   {a.links.map((l) => (
-                    <Magnetic key={l.href}>
-                      <a href={l.href} target="_blank" rel="noopener noreferrer">{l.label}</a>
-                    </Magnetic>
+                    <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer">{l.label}</a>
                   ))}
                 </div>
               </div>
@@ -47,11 +34,10 @@ export function Stack() {
   return (
     <section className="stack" id="stack">
       <div>
-        <Sec n="04" label="Stack" />
-        <h2 data-r>What I work with</h2>
+        <h2>What I <em>build with</em></h2>
         <div className="rows">
           {stack.map(([label, items]) => (
-            <div className="row" data-r key={label}>
+            <div className="row" key={label}>
               <h4>{label}</h4>
               <p>{items.map((i) => <span key={i}>{i}</span>)}</p>
             </div>
@@ -80,7 +66,7 @@ function Interests() {
 
   return (
     <>
-      <ul className="interests" data-r>
+      <ul className="interests">
         {interests.map((it, i) => (
           <li key={it.name} onPointerEnter={() => setActive(i)} onPointerLeave={() => setActive(null)}>
             {it.name}
@@ -98,11 +84,10 @@ export function About() {
   return (
     <section className="about" id="about">
       <div>
-        <Sec n="05" label="About" />
         <div className="about-top">
-          <h2 data-r>Code is one half of it.</h2>
-          <p data-r>
-            I'm a computer scientist from Strathmore University who likes building software and learning new things. Outside the editor it's:
+          <h2>Code is <em>one half</em> of it.</h2>
+          <p>
+            I study Computer Science at Strathmore University. Most of my side projects start with something I care about outside the editor: AniTrack came from anime, Touchline from football. The rest of the time it's:
           </p>
         </div>
         <Interests />
@@ -120,13 +105,13 @@ export function Contact() {
     <>
       <section className="contact" id="contact">
         <div>
-          <Sec n="06" label="Contact" />
-          <h2 data-r>Get in touch.</h2>
-          <ul data-r>
+          <h2>Let's <em>build something</em>.</h2>
+          <p className="contact-lede">I'm open to software engineering internships and junior roles. Email is the fastest way to reach me.</p>
+          <ul>
             {rows.map((c) => (
               <li key={c.label}>
                 <a href={c.href} {...(c.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
-                  <Scramble text={c.label} /> <small>{c.hint}</small>
+                  <span>{c.label}</span> <small>{c.hint}</small>
                 </a>
               </li>
             ))}

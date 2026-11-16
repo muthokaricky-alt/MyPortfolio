@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { ScrollTrigger, gsap, reduceMotion, startSmoothScroll, scrollToEl, scrollTop } from './lib/motion.js';
+import { scrollToEl, scrollTop } from './lib/motion.js';
 import { usePath, navigate, pending, Link } from './lib/router.jsx';
 import { projects } from './data.js';
 import Hero from './components/Hero.jsx';
 import Rail from './components/Rail.jsx';
 import Activity from './components/Activity.jsx';
 import ProjectPage from './components/ProjectPage.jsx';
-import Cursor from './components/rb/Cursor.jsx';
-import Scramble from './components/rb/Scramble.jsx';
 import { Also, Stack, About, Contact } from './components/Sections.jsx';
 
 const links = [['Work', '#work'], ['Stack', '#stack'], ['About', '#about'], ['Contact', '#contact']];
@@ -59,7 +57,7 @@ function Nav({ path }) {
         {links.map(([label, hash]) => (
           <li key={hash}>
             <a href={`/${hash}`} className={active === hash.slice(1) ? 'on' : ''} onClick={go(hash)}>
-              <Scramble text={label} />
+              {label}
             </a>
           </li>
         ))}
@@ -70,34 +68,16 @@ function Nav({ path }) {
 }
 
 function Home() {
-  const root = useRef(null);
-
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      if (reduceMotion()) return;
-      gsap.utils.toArray('[data-r]').forEach((el) => {
-        gsap.from(el, { opacity: 0, y: 36, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } });
-      });
-    }, root);
-
-    const refresh = () => { ScrollTrigger.sort(); ScrollTrigger.refresh(); };
-    window.addEventListener('load', refresh);
-    requestAnimationFrame(refresh);
-
     if (pending.hash) {
       const hash = pending.hash;
       pending.hash = null;
-      requestAnimationFrame(() => requestAnimationFrame(() => scrollToEl(hash)));
+      requestAnimationFrame(() => requestAnimationFrame(() => scrollToEl(hash, true)));
     }
-
-    return () => {
-      window.removeEventListener('load', refresh);
-      ctx.revert();
-    };
   }, []);
 
   return (
-    <main ref={root}>
+    <main>
       <Hero />
       <Rail />
       <Activity />
@@ -113,7 +93,6 @@ function NotFound() {
   return (
     <main className="nf">
       <div>
-        <div className="sec"><b>404</b><i /><span>Not found</span></div>
         <h1>That page isn't here.</h1>
         <p><Link to="/">Back to the portfolio</Link></p>
       </div>
@@ -129,8 +108,6 @@ export default function App() {
 
   useEffect(() => {
     if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
-    if (reduceMotion()) return;
-    return startSmoothScroll();
   }, []);
 
   useEffect(() => {
@@ -146,7 +123,6 @@ export default function App() {
 
   return (
     <>
-      <Cursor />
       <Nav path={path} />
       {project ? <ProjectPage key={project.id} p={project} /> : path === '/' ? <Home /> : <NotFound />}
     </>

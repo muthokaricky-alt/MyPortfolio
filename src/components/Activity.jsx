@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { activityRepos } from '../data.js';
-import { Sec } from './Sections.jsx';
 
 const OWNER = 'muthokaricky-alt';
 const CACHE = 'gh-activity-v1';
@@ -46,10 +45,10 @@ export default function Activity() {
   return (
     <section className="now" id="now">
       <div>
-        <Sec n="02" label="Now building" />
+        <h2 className="now-h">Latest commits</h2>
         <div className="now-grid">
           {items.map((it) => (
-            <a key={it.name} href={it.url} target="_blank" rel="noopener noreferrer" data-r>
+            <a key={it.name} href={it.url} target="_blank" rel="noopener noreferrer">
               <h4><span className="live" />{it.name}</h4>
               <p>{it.msg}</p>
               <small>{it.note} · last commit {timeAgo(it.date)}</small>
